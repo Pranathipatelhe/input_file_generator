@@ -14,14 +14,15 @@ class PredictionData:
         result3=mycollection2.find(
             {'date': {'$eq': date},
              'customer_id': customer_id},
-            {'_id': 0, 'response.day.avgtemp_f': 1})
+            {'_id': 0, 'avgtemp_f': 1})
 
         return result3
 
     def get_influncere_data(cls, customer_id, date):
         mycollection4 = dbname['influencer_data']
         result4 = mycollection4.find(
-            {'date': {'$eq': date},
+            {'start_date': {'$gte': date},
+             'end_date': {'$lte': date},
              'customer_id': customer_id},
             {'_id': 0, 'influencer_value': 1, 'influencer_type': 1})
         return result4
@@ -81,7 +82,7 @@ if __name__ == "__main__":
         result3 = p.get_weather_data(df2.loc[i, "customer_id"], df2.loc[i,"date"])
         list_cur2 = list(result3)
         if len(list_cur2) > 0:
-            df2.loc[i, "avgtemp_f"] = list_cur2[0]["response"]["day"]["avgtemp_f"]
+            df2.loc[i, "avgtemp_f"] = list_cur2[0]["avgtemp_f"]
 
         result4 = p.get_influncere_data(df2.loc[i, "customer_id"], df2.loc[i,"date"])
         list_cur3 = list(result4)
